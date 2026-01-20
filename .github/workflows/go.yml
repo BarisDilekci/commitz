@@ -2,38 +2,43 @@ name: Go CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: '1.25'         
-        cache: true                
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache: true
 
-    - name: Download dependencies
-      run: go mod download
+      - name: Download dependencies
+        run: go mod download
 
-    - name: Verify dependencies
-      run: go mod tidy
+      - name: Verify dependencies
+        run: go mod tidy
 
-    - name: Format check
-      run: go fmt ./... && git diff --exit-code  
+      - name: Check formatting
+        run: |
+          if [ -n "$(gofmt -l .)" ]; then
+            echo "The following files are not gofmt formatted:"
+            gofmt -l .
+            exit 1
+          fi
 
-    - name: Vet
-      run: go vet ./...
+      - name: Vet
+        run: go vet ./...
 
-    - name: Build
-      run: go build -v ./...
+      - name: Build
+        run: go build ./...
 
-    - name: Test
-      run: go test -v -race -cover ./...   
+      - name: Test
+        run: go test -race -cover ./...
