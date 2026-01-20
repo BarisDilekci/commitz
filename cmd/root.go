@@ -49,11 +49,6 @@ var rootCmd = &cobra.Command{
 	Long: `Commitz helps you create well-formatted conventional commits.
 It can auto-detect commit types or guide you through an interactive process.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if interactive {
-			runInteractive()
-			return
-		}
-
 		generateCommitMessage()
 	},
 }
@@ -106,9 +101,6 @@ func init() {
 		false,
 		"Enable interactive commit mode",
 	)
-}
-func runInteractive() {
-	println("Interactive mode is not implemented yet.")
 }
 
 func generateCommitMessage() {
