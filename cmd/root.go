@@ -49,6 +49,11 @@ var rootCmd = &cobra.Command{
 	Long: `Commitz helps you create well-formatted conventional commits.
 It can auto-detect commit types or guide you through an interactive process.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if interactive {
+			runInteractive()
+			return
+		}
+
 		generateCommitMessage()
 	},
 }
@@ -62,11 +67,48 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&commitType, "type", "t", "", "Commit type (feat, fix, docs, etc.)")
-	rootCmd.PersistentFlags().StringVarP(&commitScope, "scope", "s", "", "Commit scope")
-	rootCmd.PersistentFlags().BoolVarP(&useEmoji, "emoji", "e", false, "Add emoji to commit message")
-	rootCmd.PersistentFlags().BoolVarP(&dryRun, "dry-run", "d", false, "Preview commit message without committing")
-	rootCmd.PersistentFlags().BoolVarP(&interactive, "interactive", "i", false, "Interactive mode with prompts")
+	rootCmd.PersistentFlags().StringVarP(
+		&commitType,
+		"type",
+		"t",
+		"",
+		"Commit type (feat, fix, docs, refactor, test, chore)",
+	)
+
+	rootCmd.PersistentFlags().StringVarP(
+		&commitScope,
+		"scope",
+		"s",
+		"",
+		"Commit scope",
+	)
+
+	rootCmd.PersistentFlags().BoolVarP(
+		&useEmoji,
+		"emoji",
+		"e",
+		false,
+		"Add emoji to commit message",
+	)
+
+	rootCmd.PersistentFlags().BoolVarP(
+		&dryRun,
+		"dry-run",
+		"d",
+		false,
+		"Preview commit message without committing",
+	)
+
+	rootCmd.PersistentFlags().BoolVarP(
+		&interactive,
+		"interactive",
+		"i",
+		false,
+		"Enable interactive commit mode",
+	)
+}
+func runInteractive() {
+	println("Interactive mode is not implemented yet.")
 }
 
 func generateCommitMessage() {
